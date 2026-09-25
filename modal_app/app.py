@@ -67,7 +67,7 @@ image = (
         modal.Secret.from_name("demucs-config"),  # GCS_BUCKET, GCS_PREFIX
         modal.Secret.from_name("audio-webhook"),  # WEBHOOK_SECRET
     ],
-    timeout=600,
+    timeout=900,  # 15 min per job; a 40-min video takes ~4 min
     scaledown_window=30,
     max_containers=10,
     enable_memory_snapshot=True,
