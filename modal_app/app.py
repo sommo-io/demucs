@@ -2,8 +2,8 @@
 
 Runs the same runpod/handler.py as the RunPod image, so inputs and outputs are identical.
 
-Deploy from the repo root:
-    modal deploy modal_app/app.py
+Deploy from the repo root (deploys, then pre-builds memory snapshots on a few containers):
+    modal_app/deploy.sh
 
 HTTP API (Modal proxy auth: send Modal-Key / Modal-Secret headers from a proxy auth token):
     POST /run            {"input": {...}, "webhook"?: "https://..."}  -> {"id": "fc-...", "status": "IN_QUEUE"}
@@ -108,6 +108,14 @@ class Demucs:
         self.handler.DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
         self.handler._models["htdemucs"] = self.model.to(self.handler.DEVICE)
         print(f"model moved to {self.handler.DEVICE} in {time.perf_counter() - t0:.2f}s")
+
+    @modal.method()
+    def warmup(self, hold_seconds: float = 0) -> dict:
+        """No-op used by warmup.py after a deploy to build memory snapshots before users do."""
+        import os
+
+        time.sleep(hold_seconds)  # keeps this container busy so parallel calls land on others
+        return {"task": os.environ.get("MODAL_TASK_ID"), "device": self.handler.DEVICE}
 
     @modal.method()
     def separate(self, job_id: str, inp: dict, submitted_at: float) -> dict:
