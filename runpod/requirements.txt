@@ -1,0 +1,14 @@
+runpod>=1.7.0
+requests
+numpy<2
+dora-search
+einops
+julius>=0.2.3
+lameenc>=1.2
+openunmix
+pyyaml
+tqdm
+diffq>=0.2.1
+soundfile>=0.12.1
+boto3
+google-cloud-storage>=2.16
