@@ -68,7 +68,9 @@ image = (
         modal.Secret.from_name("audio-webhook"),  # WEBHOOK_SECRET
     ],
     timeout=900,  # 15 min per job; a 40-min video takes ~4 min
-    scaledown_window=30,
+    # Keep an idle container warm 2 min: requests often come in bursts (preview, then full file),
+    # so the second one is a warm hit. Costs ~$0.017/min per idle L4 container.
+    scaledown_window=120,
     max_containers=10,
     enable_memory_snapshot=True,
 )
