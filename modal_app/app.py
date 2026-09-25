@@ -92,6 +92,9 @@ class Demucs:
 
         with torch.no_grad():
             apply_model(self.model, torch.zeros(1, 2, self.model.samplerate), device="cpu", split=True)
+        import lameenc  # noqa: F401  (demucs.audio.encode_mp3 imports it lazily)
+
+        handler._gcs()  # google-cloud-storage import + client construction
         print(f"model loaded and warmed on cpu in {time.perf_counter() - t0:.2f}s")
 
     @modal.enter(snap=False)
