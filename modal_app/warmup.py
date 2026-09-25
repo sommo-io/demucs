@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 import modal
 
 app_name = sys.argv[1] if len(sys.argv) > 1 else "demucs"
-n = int(sys.argv[2]) if len(sys.argv) > 2 else 6
+n = int(sys.argv[2]) if len(sys.argv) > 2 else 5
 cls = modal.Cls.from_name(app_name, "Demucs")
 
 

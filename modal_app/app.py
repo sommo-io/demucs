@@ -25,7 +25,8 @@ import time
 import modal
 
 MODELS = ["htdemucs", "htdemucs_ft", "htdemucs_6s", "hdemucs_mmi", "mdx", "mdx_q", "mdx_extra", "mdx_extra_q"]
-GPU = "L4"
+# Fallback list: if no L4 is free, run on A10 (same 24 GB, ~$1.10/h vs $0.80/h) instead of queueing.
+GPU = ["L4", "A10"]
 
 app = modal.App("demucs")
 
@@ -71,7 +72,7 @@ image = (
     # Keep an idle container warm 2 min: requests often come in bursts (preview, then full file),
     # so the second one is a warm hit. Costs ~$0.017/min per idle L4 container.
     scaledown_window=120,
-    max_containers=10,
+    max_containers=5,  # the workspace GPU limit (10 on Starter) is shared with resemble-enhance: 5/5
     enable_memory_snapshot=True,
 )
 class Demucs:
