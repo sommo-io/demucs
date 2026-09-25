@@ -25,8 +25,9 @@ import time
 import modal
 
 MODELS = ["htdemucs", "htdemucs_ft", "htdemucs_6s", "hdemucs_mmi", "mdx", "mdx_q", "mdx_extra", "mdx_extra_q"]
-# Fallback list: if no L4 is free, run on A10 (same 24 GB, ~$1.10/h vs $0.80/h) instead of queueing.
-GPU = ["L4", "A10"]
+# Fallback list, tried in order when the previous type has no free capacity, instead of queueing:
+# L4 ~$0.80/h, A10 ~$1.10/h (both 24 GB), L40S ~$1.95/h (48 GB). Snapshots are per GPU type.
+GPU = ["L4", "A10", "L40S"]
 
 app = modal.App("demucs")
 
